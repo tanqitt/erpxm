@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.dao.SysRolesDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.accp.entity.SysRoles">
+        <id column="id" property="id" />
+        <result column="role" property="role" />
+        <result column="description" property="description" />
+        <result column="available" property="available" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, role, description, available
+    </sql>
+
+	<select id="queryByUserName" resultMap="BaseResultMap">
+  	SELECT DISTINCT r.*
+		FROM `sys_roles` r
+		INNER JOIN `sys_users_roles` ur ON ur.`role_id`=r.`id`
+		INNER JOIN `sys_users` u ON u.`id`=ur.`user_id`
+		where u.`username` like concat('%',#{username},'%')   
+  </select>
+  
+  <select id="queryByUserid" resultMap="BaseResultMap">
+  	SELECT DISTINCT r.*
+		FROM `sys_roles` r
+		INNER JOIN `sys_users_roles` ur ON ur.`role_id`=r.`id`
+		INNER JOIN `sys_users` u ON u.`id`=ur.`user_id`
+		where r.id = #{id}   
+  </select>
+  
+  <!-- 查看所有用户角色 -->
+  <select id="queryBage" resultMap="BaseResultMap">
+  	SELECT DISTINCT r.*
+		FROM `sys_roles` r
+		INNER JOIN `sys_users_roles` ur ON ur.`role_id`=r.`id`
+		INNER JOIN `sys_users` u ON u.`id`=ur.`user_id`
+		<!-- where u.`username` like concat('%',#{username},'%')    -->
+  </select>
+  
+  <!-- 查询角色详情 -->
+  	<select id="queryxq" resultMap="BaseResultMap">
+		SELECT * FROM `sys_roles_permissions` srp INNER JOIN `sys_permissions` sp
+		ON srp.role_id = sp.id
+		WHERE srp.role_id = #{id}
+	</select>
+  
+  
+</mapper>
